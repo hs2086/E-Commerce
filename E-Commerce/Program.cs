@@ -1,9 +1,17 @@
 using E_Commerce.Extensions;
+using Repository.Repos.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    })
+    .AddApplicationPart(typeof(E_Commerce.Presentation.AssemblyReference).Assembly);
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
@@ -11,6 +19,11 @@ builder.Services.AddHttpClient();
 
 builder.ConfigureLogging();
 builder.Services.ConfigureLoggerService();
+
+builder.Services.ConfigureSqlContext(builder.Configuration);
+builder.Services.ConfigureRepositoryManager();
+builder.Services.ConfigureServiceManager();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 var app = builder.Build();

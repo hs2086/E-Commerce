@@ -61,7 +61,6 @@ namespace Service
 
             await repositoryManager.Auth.VerifyEmailAsync(verifyEmail);
         }
-
         public async Task ResendVerificationEmailAsync(ResendVerificationEmailDto resendVerificationEmail)
         {
             var user = await repositoryManager.Auth.GetUserByEmailAsync(resendVerificationEmail.Email);
@@ -74,6 +73,20 @@ namespace Service
                 throw new EmailAlreadyVerifiedBadRequestException($"Email: {resendVerificationEmail.Email} is already verified.");
             }
             await repositoryManager.Auth.SendVerificationEmailAsync(resendVerificationEmail.Email);
+        }
+        public async Task<AuthModel> LoginAsync(LoginDto login)
+        {
+            var authModel = await repositoryManager.Auth.LoginAsync(login);
+            return authModel;
+        }
+        public async Task<AuthModel> RefreshTokenAsync(RefreshTokenDto refreshToken)
+        {
+            var authModel = await repositoryManager.Auth.RefreshTokenAsync(refreshToken);
+            return authModel;
+        }
+        public async Task LogoutAsync(string? userId)
+        {
+            await repositoryManager.Auth.LogoutAsync(userId);
         }
 
     }

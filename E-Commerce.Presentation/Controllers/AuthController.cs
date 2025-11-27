@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 using Shared.DataTransferObject.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,6 +43,27 @@ namespace E_Commerce.Presentation.Controllers
             return Ok("Verification email has been resent.");
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto login)
+        {
+            var data = await service.AuthService.LoginAsync(login);
+            return Ok(data);
+        }
 
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto refreshToken)
+        {
+            var data = await service.AuthService.RefreshTokenAsync(refreshToken);
+            return Ok(data);
+        }
+
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            await service.AuthService.LogoutAsync(userId);
+            return Ok("Logged out successfully.");
+        }
     }
 }

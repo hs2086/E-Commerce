@@ -17,5 +17,8 @@ namespace Contracts.IRepository
         Task SendVerificationEmailAsync(string email);
         Task DeleteUserByEmailAsync(string email);
         Task VerifyEmailAsync(VerifyEmailDto verifyEmail);
+        Task<AuthModel> LoginAsync(LoginDto login);
+        Task<AuthModel> RefreshTokenAsync(RefreshTokenDto refreshToken);
+        Task LogoutAsync(string? userId);
     }
 }

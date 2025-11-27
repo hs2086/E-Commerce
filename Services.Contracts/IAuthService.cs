@@ -12,5 +12,8 @@ namespace Services.Contracts
         Task RegisterAsync(AuthRegisterDto authRegister);
         Task VerifyEmailAsync(VerifyEmailDto verifyEmail);
         Task ResendVerificationEmailAsync(ResendVerificationEmailDto resendVerificationEmail);
+        Task<AuthModel> LoginAsync(LoginDto login);
+        Task<AuthModel> RefreshTokenAsync(RefreshTokenDto refreshToken);
+        Task LogoutAsync(string? userId);
     }
 }

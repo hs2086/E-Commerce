@@ -1,11 +1,13 @@
 using E_Commerce.Extensions;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Repository.Repos.Email;
+using Shared.Validators.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
+builder.Services.AddControllers().AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     })
@@ -24,7 +26,13 @@ builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.ConfigureJwtTokenProvider(builder.Configuration);
+builder.Services.ConfigureTimeSpanTokenProvider();
 
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<AuthRegisterDtoValidator>();
 
 var app = builder.Build();
 var logger = app.Services.GetRequiredService<Contracts.Logger.ILoggerManager>();

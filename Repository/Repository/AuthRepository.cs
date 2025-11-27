@@ -140,7 +140,6 @@ namespace Repository.Repository
                 RefreshToken = user.RefreshToken
             };
         }
-
         public async Task<AuthModel> RefreshTokenAsync(RefreshTokenDto refreshToken)
         {
             var user = await userManager.FindByEmailAsync(refreshToken.Email) ?? new ApplicationUser();
@@ -167,6 +166,34 @@ namespace Repository.Repository
             user.RefreshToken = null;
             user.RefreshTokenExpiryTime = DateTime.Now;
             await userManager.UpdateAsync(user);
+        }
+        public async Task SendPasswordResetEmailAsync(ApplicationUser user)
+        {
+            string token = await userManager.GeneratePasswordResetTokenAsync(user);
+            string encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            string url = $"{configuration["JWT:Frontend"]}/reset-password?email={user.Email}&token={encodedToken}";
+            await emailService.SendEmailAsync(
+                user.Email ?? "",
+                "Reset Your Password",
+                $@"
+                <p>Hello,</p>
+                <p>You requested to reset your password. Please reset your password by <a href=""{url}"">clicking here</a>.</p>
+                <p>If you did not request a password reset, please ignore this email.</p>
+                <br/>
+                <p>Best regards,<br/>The Support Team</p>"
+            );
+        }
+        public async Task ResetPasswordAsync(ResetPasswordDto resetPassword)
+        {
+            var user = await userManager.FindByEmailAsync(resetPassword.Email) ?? new ApplicationUser();
+            var decodedBytes = WebEncoders.Base64UrlDecode(resetPassword.Token);
+            var decodedToken = Encoding.UTF8.GetString(decodedBytes);
+            await userManager.ResetPasswordAsync(user, decodedToken, resetPassword.NewPassword);
+        }
+        public async Task ChangePasswordAsync(ChangePasswordDto changePassword, string userId)
+        {
+            var user = await userManager.FindByIdAsync(userId) ?? new ApplicationUser();
+            await userManager.ChangePasswordAsync(user, changePassword.CurrentPassword, changePassword.NewPassword);
         }
     }
 }

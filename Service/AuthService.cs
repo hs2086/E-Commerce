@@ -22,8 +22,6 @@ namespace Service
 
         public AuthService(
             IRepositoryManager repositoryManager,
-            ILoggerManager logger,
-            IMapper mapper,
             IConfiguration configuration)
         {
             this.repositoryManager = repositoryManager;
@@ -88,6 +86,21 @@ namespace Service
         {
             await repositoryManager.Auth.LogoutAsync(userId);
         }
-
+        public async Task ForgotPasswordAsync(ForgotPasswordDto forgotPassword)
+        {
+            var user = await repositoryManager.Auth.GetUserByEmailAsync(forgotPassword.Email);
+            if (user != null)
+            {
+                await repositoryManager.Auth.SendPasswordResetEmailAsync(user);
+            }
+        }
+        public async Task ResetPasswordAsync(ResetPasswordDto resetPassword)
+        {
+            await repositoryManager.Auth.ResetPasswordAsync(resetPassword);
+        }
+        public async Task ChangePasswordAsync(ChangePasswordDto changePassword, string userId)
+        {
+            await repositoryManager.Auth.ChangePasswordAsync(changePassword, userId);
+        }
     }
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Presentation.Controllers
 {
+    [ApiController]
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {
@@ -65,5 +66,29 @@ namespace E_Commerce.Presentation.Controllers
             await service.AuthService.LogoutAsync(userId);
             return Ok("Logged out successfully.");
         }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPassword)
+        {
+            await service.AuthService.ForgotPasswordAsync(forgotPassword);
+            return Ok("If an account with that email exists, a password reset link has been sent.");
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPassword)
+        {
+            await service.AuthService.ResetPasswordAsync(resetPassword);
+            return Ok("Password has been reset successfully.");
+        }
+
+        [HttpPost("change-password")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto model)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            await service.AuthService.ChangePasswordAsync(model, userId);
+            return Ok("Password changed successfully.");
+        }
+
     }
 }

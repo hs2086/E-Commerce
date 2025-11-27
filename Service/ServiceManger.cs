@@ -17,10 +17,9 @@ namespace Service
         private readonly Lazy<IAuthService> _authService;
         public ServiceManager(
             IRepositoryManager repositoryManager,
-            ILoggerManager logger, IMapper mapper,
             IConfiguration configuration)
         {
-            _authService = new Lazy<IAuthService>(() => new AuthService(repositoryManager, logger, mapper, configuration));
+            _authService = new Lazy<IAuthService>(() => new AuthService(repositoryManager, configuration));
         }
 
         public IAuthService AuthService => _authService.Value;

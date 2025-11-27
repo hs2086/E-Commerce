@@ -15,5 +15,8 @@ namespace Services.Contracts
         Task<AuthModel> LoginAsync(LoginDto login);
         Task<AuthModel> RefreshTokenAsync(RefreshTokenDto refreshToken);
         Task LogoutAsync(string? userId);
+        Task ForgotPasswordAsync(ForgotPasswordDto forgotPassword);
+        Task ResetPasswordAsync(ResetPasswordDto resetPassword);
+        Task ChangePasswordAsync(ChangePasswordDto changePassword, string userId);
     }
 }

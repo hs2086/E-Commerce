@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Entities.Exceptions
 {
-    public abstract class BadRequestException : Exception
+    public class EmailNotFoundException : NotFoundException
     {
-        protected BadRequestException(string message) : base(message) { }
+        public EmailNotFoundException(string message) : base(message)
+        {
+        }
     }
 }
-  

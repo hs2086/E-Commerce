@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.DataTransferObject.Auth;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,8 @@ namespace Services.Contracts
 {
     public interface IAuthService
     {
+        Task RegisterAsync(AuthRegisterDto authRegister);
+        Task VerifyEmailAsync(VerifyEmailDto verifyEmail);
+        Task ResendVerificationEmailAsync(ResendVerificationEmailDto resendVerificationEmail);
     }
 }

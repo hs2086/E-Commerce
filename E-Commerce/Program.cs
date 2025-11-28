@@ -1,7 +1,10 @@
+using Contracts;
 using E_Commerce.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Repository.Repos.Email;
+using Service.DataShapping;
+using Shared.DataTransferObject.Product;
 using Shared.Validators.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +31,9 @@ builder.Services.ConfigureServiceManager();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.ConfigureJwtTokenProvider(builder.Configuration);
 builder.Services.ConfigureTimeSpanTokenProvider();
+
+builder.Services.AddScoped<IDataShaper<ProductDto>, DataShaper<ProductDto>>();
+builder.Services.AddAutoMapper(typeof(Program));
 
 
 builder.Services.AddFluentValidationAutoValidation();

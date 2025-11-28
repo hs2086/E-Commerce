@@ -22,5 +22,10 @@ namespace Repository.Repository
         public async Task<Category?> GetCategoryAsync(int id, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(id), trackChanges)
             .SingleOrDefaultAsync();
+
+        public void CreateCategory(Category category) => Create(category);
+
+        public void DeleteCategory(Category category) =>
+            Delete(category);
     }
 }

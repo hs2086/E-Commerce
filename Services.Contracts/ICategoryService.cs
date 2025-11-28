@@ -14,6 +14,8 @@ namespace Services.Contracts
         Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync(bool trackChanges);
         Task<CategoryDto> GetByIdAsync(int id, bool trackChanges);
         Task<(IEnumerable<ProductDto> products, MetaData metaData)> GetProductsByCategoryIdAsync(int categoryId, ProductParameters productParameters, bool trackChanges);
-
+        Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto category);
+        Task UpdateCategoryAsync(int id, UpdateCategoryDto categoryDto, bool trackChanges);
+        Task DeleteCategoryAsync(int id, bool trackChanges);
     }
 }

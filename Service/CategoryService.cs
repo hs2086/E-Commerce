@@ -3,10 +3,12 @@ using Contracts.IRepository;
 using Contracts.Logger;
 using Entities.Exceptions;
 using Entities.Model;
+using FluentValidation;
 using Services.Contracts;
 using Shared.DataTransferObject.Category;
 using Shared.DataTransferObject.Product;
 using Shared.RequestFeatures;
+using Shared.Validators.Category;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,6 +61,31 @@ namespace Service
             var productsDto = mapper.Map<IEnumerable<ProductDto>>(products);
             return (products: productsDto, metaData: products.MetaData);
         }
+        public async Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto categoryDto)
+        {
+            var validation = new CreateCategoryDtoValidator();
+            validation.ValidateAndThrow(categoryDto);
 
+            var category = mapper.Map<Category>(categoryDto);
+            repositoryManager.Category.CreateCategory(category);
+            await repositoryManager.SaveAsync();
+            var categorydto = mapper.Map<CategoryDto>(category);
+            return categorydto;
+        }
+        public async Task UpdateCategoryAsync(int id, UpdateCategoryDto categoryDto, bool trackChanges)
+        {
+            var validation = new UpdateCategoryDtoValidator();
+            validation.ValidateAndThrow(categoryDto);
+
+            var categoryFromDb = await GetCategoryAndCheckIfExistAsync(id, trackChanges);
+            mapper.Map(categoryDto, categoryFromDb);
+            await repositoryManager.SaveAsync();
+        }
+        public async Task DeleteCategoryAsync(int id, bool trackChanges)
+        {
+            var category = await GetCategoryAndCheckIfExistAsync(id, trackChanges);
+            repositoryManager.Category.DeleteCategory(category);
+            await repositoryManager.SaveAsync();
+        }
     }
 }

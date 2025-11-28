@@ -11,5 +11,7 @@ namespace Contracts.IRepository
     {
         Task<IEnumerable<Category>> GetAllCategoriesAsync(bool trackChanges);
         Task<Category?> GetCategoryAsync(int id, bool trackChanges);
+        void CreateCategory(Category category);
+        void DeleteCategory(Category category);
     }
 }

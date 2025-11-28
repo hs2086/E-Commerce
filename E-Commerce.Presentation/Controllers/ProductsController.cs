@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
+using Shared.DataTransferObject.Category;
 using Shared.RequestFeatures;
 using System;
 using System.Collections.Generic;
@@ -41,6 +43,5 @@ namespace E_Commerce.Presentation.Controllers
             var products = await services.ProductService.SearchProductsAsync(query, false);
             return Ok(products);
         }
-
     }
 }

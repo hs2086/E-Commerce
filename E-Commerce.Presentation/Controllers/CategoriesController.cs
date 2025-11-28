@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
+using Shared.DataTransferObject.Category;
 using Shared.RequestFeatures;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,30 @@ namespace E_Commerce.Presentation.Controllers
             Response.Headers.Add("X-Pagination", System.Text.Json.JsonSerializer.Serialize(pagedResult.metaData));
 
             return Ok(pagedResult.products);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto category)
+        {
+            var createdCategory = await service.CategoryService.CreateCategoryAsync(category);
+            return CreatedAtAction(nameof(GetCategoryById), new { id = createdCategory.Id }, createdCategory);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDto categoryDto)
+        {
+            await service.CategoryService.UpdateCategoryAsync(id, categoryDto, true);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            await service.CategoryService.DeleteCategoryAsync(id, trackChanges: false);
+            return NoContent();
         }
 
     }

@@ -11,5 +11,6 @@ namespace Contracts.IRepository
         IAuthRepository Auth { get; }
         IProductRepository Product { get; }
         ICategoryRepository Category { get; }
+        Task SaveAsync();
     }
 }

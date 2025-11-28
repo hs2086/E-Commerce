@@ -14,6 +14,7 @@ namespace Repository.Repository
 {
     public class RepositoryManager : IRepositoryManager
     {
+        private readonly RepositoryContext repositoryContext;
         private Lazy<IAuthRepository> _authRepository;
         private Lazy<ICategoryRepository> _categoryRepository;
         private Lazy<IProductRepository> _productRepository;
@@ -23,6 +24,7 @@ namespace Repository.Repository
             _authRepository = new Lazy<IAuthRepository>(() => new AuthRepository(userManager, configuration, emailService));
             _categoryRepository = new Lazy<ICategoryRepository>(() => new CategoryRepository(repositoryContext));
             _productRepository = new Lazy<IProductRepository>(() => new ProductRepository(repositoryContext));
+            this.repositoryContext = repositoryContext;
         }
 
         public IAuthRepository Auth => _authRepository.Value;
@@ -30,5 +32,7 @@ namespace Repository.Repository
         public IProductRepository Product => _productRepository.Value;
 
         public ICategoryRepository Category => _categoryRepository.Value;
+
+        public async Task SaveAsync() => await repositoryContext.SaveChangesAsync();
     }
 }

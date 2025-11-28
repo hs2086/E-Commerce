@@ -19,6 +19,8 @@ namespace Service
         private readonly Lazy<IAuthService> _authService;
         private readonly Lazy<ICategoryService> _categoryService;
         private readonly Lazy<IProductService> _productService;
+        private readonly Lazy<IRoleService> _roleService;
+        private readonly Lazy<IUserService> _userService;
         public ServiceManager(
             IRepositoryManager repositoryManager,
             ILoggerManager logger, IMapper mapper,
@@ -28,6 +30,8 @@ namespace Service
             _authService = new Lazy<IAuthService>(() => new AuthService(repositoryManager, configuration));
             _categoryService = new Lazy<ICategoryService>(() => new CategoryService(repositoryManager, logger, mapper));
             _productService = new Lazy<IProductService>(() => new ProductService(repositoryManager, logger, mapper, configuration, dataShaper));
+            _roleService = new Lazy<IRoleService>(() => new RoleService(repositoryManager, logger, mapper));
+            _userService = new Lazy<IUserService>(() => new UserService(repositoryManager, logger, mapper));
         }
 
         public IAuthService AuthService => _authService.Value;
@@ -35,5 +39,9 @@ namespace Service
         public ICategoryService CategoryService => _categoryService.Value;
 
         public IProductService ProductService => _productService.Value;
+
+        public IRoleService RoleService => _roleService.Value;
+
+        public IUserService UserService => _userService.Value;
     }
 }

@@ -11,5 +11,7 @@ namespace Services.Contracts
         IAuthService AuthService { get; }
         ICategoryService CategoryService { get; }
         IProductService ProductService { get; }
+        IRoleService RoleService { get; }
+        IUserService UserService { get; }
     }
 }

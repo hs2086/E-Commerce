@@ -9,5 +9,7 @@ namespace Contracts.IRepository
     public interface IRepositoryManager
     {
         IAuthRepository Auth { get; }
+        IProductRepository Product { get; }
+        ICategoryRepository Category { get; }
     }
 }

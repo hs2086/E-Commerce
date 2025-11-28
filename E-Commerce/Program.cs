@@ -34,6 +34,7 @@ builder.Services.ConfigureTimeSpanTokenProvider();
 
 builder.Services.AddScoped<IDataShaper<ProductDto>, DataShaper<ProductDto>>();
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.ConfigureSwagger();
 
 
 builder.Services.AddFluentValidationAutoValidation();

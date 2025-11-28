@@ -23,5 +23,6 @@ namespace Contracts.IRepository
         Task SendPasswordResetEmailAsync(ApplicationUser user);
         Task ResetPasswordAsync(ResetPasswordDto resetPassword);
         Task ChangePasswordAsync(ChangePasswordDto changePassword, string userId);
+        Task<IEnumerable<IdentityRole>> GetRolesAsync(string email);
     }
 }

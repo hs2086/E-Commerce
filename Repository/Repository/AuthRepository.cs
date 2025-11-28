@@ -195,5 +195,16 @@ namespace Repository.Repository
             var user = await userManager.FindByIdAsync(userId) ?? new ApplicationUser();
             await userManager.ChangePasswordAsync(user, changePassword.CurrentPassword, changePassword.NewPassword);
         }
+        public async Task<IEnumerable<IdentityRole>> GetRolesAsync(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email) ?? new ApplicationUser();
+            var roles = await userManager.GetRolesAsync(user);
+            List<IdentityRole> identityRoles = new List<IdentityRole>();
+            foreach (var roleName in roles)
+            {
+                identityRoles.Add(new IdentityRole { Name = roleName });
+            }
+            return identityRoles;
+        }
     }
 }

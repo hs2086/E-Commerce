@@ -21,6 +21,7 @@ namespace Service
         private readonly Lazy<IProductService> _productService;
         private readonly Lazy<IRoleService> _roleService;
         private readonly Lazy<IUserService> _userService;
+        private readonly Lazy<ICartService> _cartService;
         public ServiceManager(
             IRepositoryManager repositoryManager,
             ILoggerManager logger, IMapper mapper,
@@ -32,6 +33,7 @@ namespace Service
             _productService = new Lazy<IProductService>(() => new ProductService(repositoryManager, logger, mapper, configuration, dataShaper));
             _roleService = new Lazy<IRoleService>(() => new RoleService(repositoryManager, logger, mapper));
             _userService = new Lazy<IUserService>(() => new UserService(repositoryManager, logger, mapper));
+            _cartService = new Lazy<ICartService>(() => new CartService(repositoryManager, logger, mapper));
         }
 
         public IAuthService AuthService => _authService.Value;
@@ -43,5 +45,7 @@ namespace Service
         public IRoleService RoleService => _roleService.Value;
 
         public IUserService UserService => _userService.Value;
+
+        public ICartService CartService => _cartService.Value;
     }
 }

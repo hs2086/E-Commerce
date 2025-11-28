@@ -13,6 +13,7 @@ namespace Contracts.IRepository
         ICategoryRepository Category { get; }
         IRoleRepository Role { get; }
         IUserRepository User { get; }
+        ICartRepository Cart { get; }
         Task SaveAsync();
     }
 }

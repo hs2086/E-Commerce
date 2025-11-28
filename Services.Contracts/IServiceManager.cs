@@ -13,5 +13,6 @@ namespace Services.Contracts
         IProductService ProductService { get; }
         IRoleService RoleService { get; }
         IUserService UserService { get; }
+        ICartService CartService { get; }
     }
 }

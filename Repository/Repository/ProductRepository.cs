@@ -47,6 +47,7 @@ namespace Repository.Repository
         public async Task<IEnumerable<Product>> SearchProductsAsync(string query, bool trackChanges) =>
             await FindByCondition(p => p.Name.Contains(query) || p.Description.Contains(query), trackChanges)
             .ToListAsync();
-
+        public void CreateProduct(Product product) => Create(product);
+        public void DeleteProduct(Product product) => Delete(product);
     }
 }

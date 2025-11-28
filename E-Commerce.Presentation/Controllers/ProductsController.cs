@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 using Shared.DataTransferObject.Category;
+using Shared.DataTransferObject.Product;
 using Shared.RequestFeatures;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,30 @@ namespace E_Commerce.Presentation.Controllers
         {
             var products = await services.ProductService.SearchProductsAsync(query, false);
             return Ok(products);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductDto createProductDto)
+        {
+            var result = await services.ProductService.CreateProductAsync(createProductDto);
+            return CreatedAtAction(nameof(GetProductById), new { id = result.Id }, result);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDto productDto)
+        {
+            await services.ProductService.UpdateProductAsync(id, productDto, true);
+            return Ok("Product updated successfully");
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            await services.ProductService.DeleteProductAsync(id, false);
+            return NoContent();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Contracts.IRepository
         Task<Product?> GetProductAsync(int id, bool trackChanges);
         Task<IEnumerable<Product>> SearchProductsAsync(string query, bool trackChanges);
         Task<PagedList<Product>> GetProductsByCategoryIdAsync(int categoryId, ProductParameters productParameters, bool trackChanges);
-
+        void CreateProduct(Product product);
+        void DeleteProduct(Product product);
     }
 }

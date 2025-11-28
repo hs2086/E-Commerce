@@ -4,10 +4,12 @@ using Contracts.IRepository;
 using Contracts.Logger;
 using Entities.Exceptions;
 using Entities.Model;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Services.Contracts;
 using Shared.DataTransferObject.Product;
 using Shared.RequestFeatures;
+using Shared.Validators.Product;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -59,8 +61,13 @@ namespace Service
                 throw new ProductNotFoundException($"Product with id: {id} doesn't exist in the database.");
             return product;
         }
-
-
+        private async Task<Category> GetCategoryAndCheckIfExistAsync(int id, bool trackChanges)
+        {
+            var category = await repositoryManager.Category.GetCategoryAsync(id, trackChanges);
+            if (category == null)
+                throw new CategoryNotFoundException(id);
+            return category;
+        }
         public async Task<ProductDto?> GetProductByIdAsync(int id, bool trackChanges)
         {
             var product = await GetProductAndCheckIfExistAsync(id, trackChanges);
@@ -74,6 +81,75 @@ namespace Service
                 throw new ProductNotFoundException($"There is no products match this {query}");
             var productsDto = mapper.Map<IEnumerable<ProductDto>>(products);
             return productsDto;
+        }
+        public async Task<ProductDto> CreateProductAsync(CreateProductDto createProductDto)
+        {
+            var validation = new CreateProductDtoValidator();
+            validation.ValidateAndThrow(createProductDto);
+
+            await GetCategoryAndCheckIfExistAsync(createProductDto.CategoryId, false);
+            var extension = Path.GetExtension(createProductDto.Image.FileName);
+            var fileName = $"{Guid.NewGuid()}{extension}";
+            var filePath = Path.Combine("wwwroot/Images/Products/", fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await createProductDto.Image.CopyToAsync(stream);
+            }
+            filePath = filePath.Replace("wwwroot", string.Empty);
+
+            var product = mapper.Map<Product>(createProductDto);
+            product.ImagePath = filePath;
+            repositoryManager.Product.CreateProduct(product);
+            await repositoryManager.SaveAsync();
+
+            var productDto = mapper.Map<ProductDto>(product);
+            return productDto;
+        }
+        public async Task UpdateProductAsync(int id, UpdateProductDto updateProductDto, bool trackChanges)
+        {
+            var validation = new UpdateProductDtoValidator();
+            validation.ValidateAndThrow(updateProductDto);
+
+            // check if the category is found
+            await GetCategoryAndCheckIfExistAsync(updateProductDto.CategoryId, false);
+
+            // check if the product is found
+            var productDb = await GetProductAndCheckIfExistAsync(id, trackChanges);
+
+            // delete the old image 
+            if (System.IO.File.Exists($"wwwroot/{productDb.ImagePath}"))
+            {
+                System.IO.File.Delete($"wwwroot/{productDb.ImagePath}");
+            }
+
+            // save the new image 
+            var extension = Path.GetExtension(updateProductDto.Image.FileName);
+            var fileName = $"{Guid.NewGuid()}{extension}";
+            var filePath = Path.Combine("wwwroot/Images/Products/", fileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await updateProductDto.Image.CopyToAsync(stream);
+            }
+            filePath = filePath.Replace("wwwroot", string.Empty);
+
+            mapper.Map(updateProductDto, productDb);
+            productDb.ImagePath = filePath;
+
+            //var updatedProduct = mapper.Map<Product>(updateProductDto);
+            //repositoryManager.Product.Update(updatedProduct);
+            await repositoryManager.SaveAsync();
+        }
+        public async Task DeleteProductAsync(int id, bool trackChange)
+        {
+            var product = await GetProductAndCheckIfExistAsync(id, trackChange);
+
+            if (System.IO.File.Exists($"wwwroot/{product.ImagePath}"))
+            {
+                System.IO.File.Delete($"wwwroot/{product.ImagePath}");
+            }
+
+            repositoryManager.Product.DeleteProduct(product);
+            await repositoryManager.SaveAsync();
         }
     }
 }

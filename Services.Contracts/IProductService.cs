@@ -14,5 +14,8 @@ namespace Services.Contracts
         Task<(IEnumerable<ExpandoObject> products, MetaData metaData)> GetAllProductsAsync(ProductParameters productParameters, bool trackChanges);
         Task<ProductDto?> GetProductByIdAsync(int id, bool trackChanges);
         Task<IEnumerable<ProductDto>> SearchProductsAsync(string query, bool trackChanges);
+        Task<ProductDto> CreateProductAsync(CreateProductDto createProductDto);
+        Task UpdateProductAsync(int id, UpdateProductDto updateProductDto, bool trackChanges);
+        Task DeleteProductAsync(int id, bool trackChange);
     }
 }

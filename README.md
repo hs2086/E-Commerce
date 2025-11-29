@@ -71,18 +71,49 @@ Used for mapping:
 - DTOs → Entities  
 
 ## ⚙️ How to Run the Project
-1️⃣ Clone the Repository
+## 1️⃣ Clone the Repository
         git clone https://github.com/hs2086/E-Commerce.git
 
-2️⃣ Configure Environment Variables
-        - Paymob
-          - APIKey
-          - IFrameId
-          - IntegrationId
-        - Email service
-          - Email
-          - Password
-          - Host
-          - Port
+## 2️⃣ Configure Environment Variables
+
+Before running the project, make sure to set up the required environment variables for **Paymob** and the **Email Service**.
+
+### 🔐 Paymob Configuration
+Add the following keys to your environment variables or `appsettings.json`:
+
+| Key             | Description                     |
+|-----------------|---------------------------------|
+| `Paymob:ApiKey` | Your Paymob API key             |
+| `Paymob:IFrameId` | Your payment iframe ID        |
+| `Paymob:IntegrationId` | Your integration ID for card payments |
+
+### 📧 Email Service Configuration
+These variables are required for sending emails using MailKit:
+
+| Key               | Description                         |
+|-------------------|-------------------------------------|
+| `Email:Email`     | Sender email address                 |
+| `Email:Password`  | Email account password or app token |
+| `Email:Host`      | SMTP host server                    |
+| `Email:Port`      | SMTP port (e.g., 587)               |
+
+### 📄 Example `appsettings.json`
+
+```json
+{
+  "Paymob": {
+    "ApiKey": "YOUR_API_KEY",
+    "IFrameId": "YOUR_IFRAME_ID",
+    "IntegrationId": "YOUR_INTEGRATION_ID"
+  },
+  "Email": {
+    "Email": "your-email@example.com",
+    "Password": "your-email-password",
+    "Host": "smtp.example.com",
+    "Port": 587
+  }
+}
+
           
+
 

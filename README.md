@@ -69,3 +69,20 @@ The project is structured following a clean and scalable architecture that separ
 Used for mapping:
 - Entities → DTOs  
 - DTOs → Entities  
+
+## ⚙️ How to Run the Project
+1️⃣ Clone the Repository
+        git clone https://github.com/hs2086/E-Commerce.git
+
+2️⃣ Configure Environment Variables
+        - Paymob
+          - APIKey
+          - IFrameId
+          - IntegrationId
+        - Email service
+          - Email
+          - Password
+          - Host
+          - Port
+          
+

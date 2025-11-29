@@ -206,5 +206,9 @@ namespace Repository.Repository
             }
             return identityRoles;
         }
+        public async Task<ApplicationUser?> GetUserByIdAsync(string id)
+        {
+            return await userManager.FindByIdAsync(id);
+        }
     }
 }

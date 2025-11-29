@@ -14,5 +14,10 @@ namespace Services.Contracts
         IRoleService RoleService { get; }
         IUserService UserService { get; }
         ICartService CartService { get; }
+        IOrderService OrderService { get; }
+        ICheckoutService CheckoutService { get; }
+        IPaymentService PaymentService { get; }
+        IReviewService ReviewService { get; }
+        IWishlistService WishlistService { get; }
     }
 }

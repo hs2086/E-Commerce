@@ -14,6 +14,11 @@ namespace Contracts.IRepository
         IRoleRepository Role { get; }
         IUserRepository User { get; }
         ICartRepository Cart { get; }
+        ICheckoutRepository Checkout { get; }
+        IOrderRepository Order { get; }
+        IPaymentRepository Payment { get; }
+        IReviewRepository Review { get; }
+        IWishlistRepository Wishlist { get; }
         Task SaveAsync();
     }
 }
